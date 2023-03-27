@@ -23,7 +23,7 @@ steps:
     SonarCloud: 'Sonarcloud'
     organization: 'dev-organization0323'
     scannerMode: 'MSBuild'
-    projectKey: 'Agileproject'
+    projectKey: 'Agileproject0323'
     projectName: 'Agileproject'
 - task: VSBuild@1
   inputs:
