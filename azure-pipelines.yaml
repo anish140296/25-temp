@@ -15,26 +15,20 @@ steps:
   displayName: 'Install NuGet Package manager'
   
 - task: NuGetCommand@2
+  displayName: Restore NuGet packages
   inputs:
     restoreSolution: '$(solution)'
 
-- task: SonarCloudPrepare@1
+- task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    SonarCloud: 'Sonarcloud'
-    organization: 'dev-organization0323'
-    scannerMode: 'MSBuild'
-    projectKey: 'Agileproject0323'
-    projectName: 'Agileproject'
-- task: VSBuild@1
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration Release'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish
   inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: SonarCloudAnalyze@1
-
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
-
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
